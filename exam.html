@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exam Browser - Universitas Terbuka</title>
+  <title>CBT EXAM UT</title>
   <link rel="stylesheet" href="exam.css">
 </head>
 <body>
@@ -16,8 +16,9 @@
       <div class="status-item" id="network-display">📶 Online</div>
     </div>
 
-    <!-- Kanan Atas: Tombol Refresh & Keluar -->
+    <!-- Kanan Atas: Tombol Info, Refresh & Keluar -->
     <div class="action-group">
+      <button id="btn-info" class="btn btn-info" title="Informasi Aplikasi">ℹ️ Info</button>
       <button id="btn-refresh" class="btn btn-refresh" title="Muat Ulang Halaman">🔄 Refresh</button>
       <button id="btn-exit" class="btn btn-exit" title="Keluar Ujian">🚪 Keluar</button>
     </div>
@@ -34,6 +35,26 @@
       <span class="rec-dot"></span> Dipantau Pengawas
     </div>
     <video id="webcam-video" autoplay playsinline muted></video>
+  </div>
+
+  <!-- Modal Informasi Aplikasi -->
+  <div id="info-modal" class="modal hidden">
+    <div class="modal-content info-card">
+      <h2 class="info-title">CBT EXAM UT</h2>
+      <div class="info-body">
+        <p>Aplikasi ini dibuat oleh :</p>
+        <p class="creator-name">TRI SUTRISNO, S.Kom</p>
+        <p>Guru SMPN 1 Tualang</p>
+        <p class="creator-phone">08127653473</p>
+        <hr class="info-divider">
+        <p class="info-desc">
+          Aplikasi ini bertujuan untuk mempermudah untuk melaksananan ujian secara transparan dan jujur.
+        </p>
+      </div>
+      <div class="modal-buttons">
+        <button id="btn-close-info" class="btn btn-info" style="width: 100%;">Tutup</button>
+      </div>
+    </div>
   </div>
 
   <!-- Modal Konfirmasi Keluar -->
