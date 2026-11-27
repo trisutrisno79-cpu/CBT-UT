@@ -1,16 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Exam Browser Proctoring - UT",
-  "version": "1.0",
+  "name": "CBT EXAM UT - Exam Browser",
+  "version": "1.1",
   "description": "Aplikasi ujian aman untuk Chromebook dengan pemantauan kamera dan anti-kecurangan.",
   "permissions": [
     "tabs",
+    "windows",
     "system.display"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Mulai Ujian"
+    "default_title": "Mulai Ujian CBT UT"
   }
 }
