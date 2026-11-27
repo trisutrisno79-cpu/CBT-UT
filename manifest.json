@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CBT EXAM UT - Exam Browser",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Aplikasi ujian aman untuk Chromebook dengan pemantauan kamera dan anti-kecurangan.",
   "icons": {
     "16": "logo.png",
@@ -12,7 +12,8 @@
     "tabs",
     "windows",
     "system.display",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "videoCapture"
   ],
   "host_permissions": [
     "https://suo.ut.ac.id/*",
