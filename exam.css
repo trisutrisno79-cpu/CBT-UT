@@ -76,6 +76,45 @@ html, body {
   white-space: nowrap;
 }
 
+/* Kontrol Zoom In / Out */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.btn-zoom {
+  background-color: #334155;
+  color: #ffffff;
+  border: none;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-zoom:hover {
+  background-color: #475569;
+}
+
+.zoom-text {
+  padding: 0 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #e2e8f0;
+  cursor: pointer;
+  min-width: 52px;
+  text-align: center;
+}
+
+.zoom-text:hover {
+  color: #38bdf8;
+}
+
 /* Tombol Kanan Atas */
 .btn {
   padding: 6px 12px;
@@ -113,7 +152,7 @@ html, body {
   width: 100%;
   height: calc(100vh - 50px);
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   background-color: #ffffff;
 }
 
@@ -122,6 +161,7 @@ html, body {
   height: 100%;
   border: none;
   display: block;
+  transform-origin: 0 0;
 }
 
 /* Kamera Pengawas (Draggable) */
