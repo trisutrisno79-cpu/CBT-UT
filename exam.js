@@ -8,17 +8,17 @@ function playAlertSound() {
     const gainNode = audioCtx.createGain();
 
     oscillator.type = 'sawtooth';
-    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Nada tinggi
-    oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.4);
+    oscillator.frequency.setValueAtTime(920, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 0.45);
 
-    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
 
     oscillator.connect(gainNode);
     gainNode.connect(audioCtx.destination);
 
     oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.4);
+    oscillator.stop(audioCtx.currentTime + 0.45);
   } catch (e) {
     console.error("Audio gagal diputar:", e);
   }
@@ -66,8 +66,17 @@ window.addEventListener('offline', updateNetwork);
 updateNetwork();
 
 // ==========================================
-// 3. TOMBOL REFRESH & KELUAR (PASSWORD: xyz)
+// 3. TOMBOL INFO, REFRESH & KELUAR (PASSWORD: xyz)
 // ==========================================
+const infoModal = document.getElementById('info-modal');
+document.getElementById('btn-info').addEventListener('click', () => {
+  infoModal.classList.remove('hidden');
+});
+
+document.getElementById('btn-close-info').addEventListener('click', () => {
+  infoModal.classList.add('hidden');
+});
+
 document.getElementById('btn-refresh').addEventListener('click', () => {
   const iframe = document.getElementById('exam-frame');
   iframe.src = iframe.src;
@@ -76,9 +85,10 @@ document.getElementById('btn-refresh').addEventListener('click', () => {
 const exitModal = document.getElementById('exit-modal');
 const exitInput = document.getElementById('exit-password');
 const errorMsg = document.getElementById('error-msg');
+let isAuthorizedExit = false;
 
 document.getElementById('btn-exit').addEventListener('click', () => {
-  playAlertSound(); // Bunyikan suara saat tombol keluar ditekan
+  playAlertSound();
   exitModal.classList.remove('hidden');
   exitInput.value = '';
   errorMsg.classList.add('hidden');
@@ -96,7 +106,8 @@ exitInput.addEventListener('keydown', (e) => {
 
 function validateExit() {
   if (exitInput.value === 'xyz') {
-    window.close(); // Tutup jendela ujian
+    isAuthorizedExit = true;
+    window.close();
   } else {
     playAlertSound();
     errorMsg.classList.remove('hidden');
@@ -122,7 +133,6 @@ async function startCamera() {
 }
 startCamera();
 
-// Logika Geser Kotak Kamera
 const cameraBox = document.getElementById('camera-box');
 const cameraHeader = document.getElementById('camera-header');
 let isDragging = false, offsetX = 0, offsetY = 0;
@@ -138,7 +148,6 @@ document.addEventListener('mousemove', (e) => {
   let newX = e.clientX - offsetX;
   let newY = e.clientY - offsetY;
 
-  // Batasi agar kamera tidak keluar dari layar
   newX = Math.max(0, Math.min(window.innerWidth - cameraBox.offsetWidth, newX));
   newY = Math.max(45, Math.min(window.innerHeight - cameraBox.offsetHeight, newY));
 
@@ -153,8 +162,34 @@ document.addEventListener('mouseup', () => {
 });
 
 // ==========================================
-// 5. ANTI COPY, ANTI KLIK KANAN, ANTI SCREENSHOT & DETEKSI TOMBOL
+// 5. ALWAYS ON TOP, DETEKSI TIDAK FOKUS & ANTI CHEAT
 // ==========================================
+// Bunyikan suara dan tarik paksa ke depan jika aplikasi kehilangan fokus
+window.addEventListener('blur', () => {
+  if (isAuthorizedExit) return;
+  playAlertSound();
+  window.focus();
+  if (chrome && chrome.windows) {
+    chrome.windows.getCurrent((win) => {
+      chrome.windows.update(win.id, { focused: true, state: "fullscreen" });
+    });
+  }
+});
+
+// Pemantauan fokus berkala (jika user menekan tombol Alt+Tab / Overview Chromebook)
+setInterval(() => {
+  if (isAuthorizedExit) return;
+  if (!document.hasFocus()) {
+    playAlertSound();
+    window.focus();
+    if (chrome && chrome.windows) {
+      chrome.windows.getCurrent((win) => {
+        chrome.windows.update(win.id, { focused: true, state: "fullscreen" });
+      });
+    }
+  }
+}, 800);
+
 // Anti Klik Kanan
 document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
@@ -171,16 +206,13 @@ document.addEventListener('contextmenu', (e) => {
 
 // Deteksi Tombol Tidak Diperlukan & Shortcut Screenshot/DevTools
 document.addEventListener('keydown', (e) => {
-  // Jika modal password sedang terbuka, izinkan mengetik password
   if (!exitModal.classList.contains('hidden')) return;
 
-  // Daftar tombol/kombinasi yang dilarang keras
   const forbiddenKeys = [
     'PrintScreen', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 
     'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Escape', 'ContextMenu'
   ];
 
-  // Cek tombol fungsi, Ctrl/Alt/Meta (tombol Search/Launcher di Chromebook), atau PrintScreen
   if (
     forbiddenKeys.includes(e.key) ||
     e.ctrlKey || 
@@ -190,27 +222,21 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     playAlertSound();
 
-    // Kosongkan clipboard jika user mencoba menekan PrintScreen
     if (e.key === 'PrintScreen' && navigator.clipboard) {
       navigator.clipboard.writeText('');
     }
   }
 });
 
-// Anti Rekam Layar / Pindah Fokus Jendela
-window.addEventListener('blur', () => {
-  playAlertSound();
-});
-
-// Paksa tetap Fullscreen jika user mencoba keluar dari fullscreen
+// Paksa tetap Fullscreen
 document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement) {
+  if (!document.fullscreenElement && !isAuthorizedExit) {
     playAlertSound();
     document.documentElement.requestFullscreen().catch(() => {});
   }
 });
 
-// Blokir API Screen Capture (getDisplayMedia) di dalam halaman
+// Blokir API Screen Capture
 if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
   navigator.mediaDevices.getDisplayMedia = function() {
     playAlertSound();
