@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CBT EXAM UT</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <link rel="stylesheet" href="exam.css">
 </head>
 <body>
   <!-- Top Navigation Bar -->
   <header id="top-bar">
-    <!-- Kiri Atas: Jam, Baterai, Jaringan -->
+    <!-- Kiri Atas: Logo Aplikasi, Jam, Baterai, Jaringan -->
     <div class="status-group">
+      <div class="brand-box">
+        <img src="logo.png" onerror="this.src='https://smpn1tualang.sch.id/images/aplikasi/logo.png'" alt="Logo Aplikasi" class="app-logo">
+        <span class="app-title">CBT EXAM UT</span>
+      </div>
       <div class="status-item" id="clock-display">🕒 --:--:--</div>
       <div class="status-item" id="battery-display">🔋 --%</div>
       <div class="status-item" id="network-display">📶 Online</div>
@@ -40,6 +45,7 @@
   <!-- Modal Informasi Aplikasi -->
   <div id="info-modal" class="modal hidden">
     <div class="modal-content info-card">
+      <img src="logo.png" onerror="this.src='https://smpn1tualang.sch.id/images/aplikasi/logo.png'" alt="Logo CBT EXAM UT" class="modal-logo">
       <h2 class="info-title">CBT EXAM UT</h2>
       <div class="info-body">
         <p>Aplikasi ini dibuat oleh :</p>
