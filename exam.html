@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Browser - Universitas Terbuka</title>
+  <link rel="stylesheet" href="exam.css">
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <header id="top-bar">
+    <!-- Kiri Atas: Jam, Baterai, Jaringan -->
+    <div class="status-group">
+      <div class="status-item" id="clock-display">🕒 --:--:--</div>
+      <div class="status-item" id="battery-display">🔋 --%</div>
+      <div class="status-item" id="network-display">📶 Online</div>
+    </div>
+
+    <!-- Kanan Atas: Tombol Refresh & Keluar -->
+    <div class="action-group">
+      <button id="btn-refresh" class="btn btn-refresh" title="Muat Ulang Halaman">🔄 Refresh</button>
+      <button id="btn-exit" class="btn btn-exit" title="Keluar Ujian">🚪 Keluar</button>
+    </div>
+  </header>
+
+  <!-- Web Ujian Utama -->
+  <main id="exam-container">
+    <iframe id="exam-frame" src="https://suo.ut.ac.id/" allow="camera; microphone; fullscreen"></iframe>
+  </main>
+
+  <!-- Form Kamera Draggable -->
+  <div id="camera-box">
+    <div id="camera-header">
+      <span class="rec-dot"></span> Dipantau Pengawas
+    </div>
+    <video id="webcam-video" autoplay playsinline muted></video>
+  </div>
+
+  <!-- Modal Konfirmasi Keluar -->
+  <div id="exit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Konfirmasi Keluar Ujian</h3>
+      <p>Masukkan password pengawas untuk keluar dari aplikasi ujian:</p>
+      <input type="password" id="exit-password" placeholder="Masukkan password..." autocomplete="off">
+      <p id="error-msg" class="error-text hidden">Password salah!</p>
+      <div class="modal-buttons">
+        <button id="btn-cancel-exit" class="btn btn-cancel">Batal</button>
+        <button id="btn-confirm-exit" class="btn btn-confirm">Keluar Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="exam.js"></script>
+</body>
+</html>
