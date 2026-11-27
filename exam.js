@@ -66,7 +66,46 @@ window.addEventListener('offline', updateNetwork);
 updateNetwork();
 
 // ==========================================
-// 3. TOMBOL INFO, REFRESH & KELUAR (PASSWORD: xyz)
+// 3. FITUR ZOOM IN, ZOOM OUT & RESET ZOOM
+// ==========================================
+let currentZoom = 100;
+const minZoom = 50;
+const maxZoom = 200;
+const zoomStep = 10;
+
+const examFrame = document.getElementById('exam-frame');
+const zoomLevelText = document.getElementById('zoom-level');
+
+function applyZoom() {
+  const scale = currentZoom / 100;
+  examFrame.style.transform = `scale(${scale})`;
+  examFrame.style.width = `${100 / scale}%`;
+  examFrame.style.height = `${100 / scale}%`;
+  zoomLevelText.textContent = `${currentZoom}%`;
+}
+
+document.getElementById('btn-zoom-in').addEventListener('click', () => {
+  if (currentZoom < maxZoom) {
+    currentZoom += zoomStep;
+    applyZoom();
+  }
+});
+
+document.getElementById('btn-zoom-out').addEventListener('click', () => {
+  if (currentZoom > minZoom) {
+    currentZoom -= zoomStep;
+    applyZoom();
+  }
+});
+
+// Klik angka persentase untuk reset ke 100%
+zoomLevelText.addEventListener('click', () => {
+  currentZoom = 100;
+  applyZoom();
+});
+
+// ==========================================
+// 4. TOMBOL INFO, REFRESH & KELUAR (PASSWORD: xyz)
 // ==========================================
 const infoModal = document.getElementById('info-modal');
 document.getElementById('btn-info').addEventListener('click', () => {
@@ -78,8 +117,7 @@ document.getElementById('btn-close-info').addEventListener('click', () => {
 });
 
 document.getElementById('btn-refresh').addEventListener('click', () => {
-  const iframe = document.getElementById('exam-frame');
-  iframe.src = iframe.src;
+  examFrame.src = examFrame.src;
 });
 
 const exitModal = document.getElementById('exit-modal');
@@ -117,7 +155,7 @@ function validateExit() {
 }
 
 // ==========================================
-// 4. KAMERA DEPAN & FITUR GESER (DRAGGABLE)
+// 5. KAMERA DEPAN & FITUR GESER (DRAGGABLE)
 // ==========================================
 async function startCamera() {
   try {
@@ -149,7 +187,7 @@ document.addEventListener('mousemove', (e) => {
   let newY = e.clientY - offsetY;
 
   newX = Math.max(0, Math.min(window.innerWidth - cameraBox.offsetWidth, newX));
-  newY = Math.max(45, Math.min(window.innerHeight - cameraBox.offsetHeight, newY));
+  newY = Math.max(50, Math.min(window.innerHeight - cameraBox.offsetHeight, newY));
 
   cameraBox.style.left = newX + 'px';
   cameraBox.style.top = newY + 'px';
@@ -162,9 +200,8 @@ document.addEventListener('mouseup', () => {
 });
 
 // ==========================================
-// 5. ALWAYS ON TOP, DETEKSI TIDAK FOKUS & ANTI CHEAT
+// 6. ALWAYS ON TOP, DETEKSI TIDAK FOKUS & ANTI CHEAT
 // ==========================================
-// Bunyikan suara dan tarik paksa ke depan jika aplikasi kehilangan fokus
 window.addEventListener('blur', () => {
   if (isAuthorizedExit) return;
   playAlertSound();
@@ -176,7 +213,6 @@ window.addEventListener('blur', () => {
   }
 });
 
-// Pemantauan fokus berkala (jika user menekan tombol Alt+Tab / Overview Chromebook)
 setInterval(() => {
   if (isAuthorizedExit) return;
   if (!document.hasFocus()) {
